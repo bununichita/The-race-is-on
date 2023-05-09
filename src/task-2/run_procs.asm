@@ -47,8 +47,8 @@ clean_results:
    
     ;; Your code starts here
     ; mov edx, 0
-    mov dx, [ecx + proc.time]
-    PRINTF32 `%d\n\x0`, edx
+    ; mov , [ecx + proc.time]
+    ; PRINTF32 `%d\n\x0`, edx
     ; esi este adresa proc_avg
     mov esi, eax
     ; edi este adresa proceselor sortate
@@ -61,15 +61,20 @@ for_i:
     mov ebx, 0 ; pozitia structurii
     mov eax, 0 ; suma elementelor cu prioritatea edx
 for_j:
-    push ebx
-    imul ebx, ebx, 5
-    ; push eax
-    ; mov ax, [edi + ebx + proc.time]
-    ; cmp edx, eax
-    ; je equal
-    ; jmp not_equal
+    push ebx ; pozitia structurii ex: 0, 1, 2, 3, 4
+    imul ebx, ebx, 5 ; inceputul structurilor ex: 0, 5, 10, 15, 20
+    push eax ; eliberez memoria pentru a putea muta timpul in eax
+    mov eax, 0
+    mov al, byte [edi + ebx + proc.prio]
+    ; PRINTF32 `edx = %d  \x0`, edx
+    ; PRINTF32 `eax = %d\n\x0`, eax
+    cmp edx, eax
+    pop eax
+    je equal
+    jmp not_equal
 equal:
-    add eax, [edi + ebx + proc.time]
+    add ax, [edi + ebx + proc.time]
+    ; PRINTF32 `%d\n\x0`, eax
 not_equal:
     pop ebx
     inc ebx
@@ -79,8 +84,9 @@ not_equal:
     push edx
     dec edx
     imul edx, edx, 4
-    PRINTF32 `eax = %d\n\x0`, eax
-    mov [prio_result + edx], eax
+    ; PRINTF32 `eax = %d\n\x0`, eax
+    mov [time_result + edx], eax
+    ; PRINTF32 `prio_result = %d\n\x0`, [prio_result + edx]
     pop edx
 
 
@@ -95,9 +101,15 @@ for_i2:
     mov ebx, 0 ; pozitia structurii
     mov eax, 0 ; numarul elementelor cu prioritatea edx
 for_j2:
-    push ebx
-    imul ebx, ebx, 5
-    cmp edx, [edi + ebx + proc.time]
+    push ebx ; pozitia structurii ex: 0, 1, 2, 3, 4
+    imul ebx, ebx, 5 ; inceputul structurilor ex: 0, 5, 10, 15, 20
+    push eax ; eliberez memoria pentru a putea muta timpul in eax
+    mov eax, 0
+    mov al, byte [edi + ebx + proc.prio]
+    ; PRINTF32 `edx = %d  \x0`, edx
+    ; PRINTF32 `eax = %d\n\x0`, eax
+    cmp edx, eax
+    pop eax
     je equal2
     jmp not_equal2
 equal2:
@@ -111,7 +123,7 @@ not_equal2:
     push edx
     dec edx
     imul edx, edx, 4
-    mov [time_result + edx], eax
+    mov [prio_result + edx], eax
     pop edx
 
 
@@ -123,30 +135,39 @@ not_equal2:
     mov ecx, 5
 
 
-loop_start:
-    push ecx
-    dec ecx
-    imul ecx, ecx, 4
-    mov eax, [prio_result + ecx]
-    mov ebx, [time_result + ecx]
-    
-    PRINTF32 `%d    \x0`, eax
-    PRINTF32 `%d\n\x0`, ebx
-    pop ecx
-    loop loop_start
-
 ; loop_start:
 ;     push ecx
 ;     dec ecx
 ;     imul ecx, ecx, 4
 ;     mov eax, [prio_result + ecx]
 ;     mov ebx, [time_result + ecx]
-;     xor edx, edx
-;     div ebx
-;     mov [esi + ecx + avg.quo], ax
-;     mov [esi + ecx + avg.remain], dx
+    
+;     PRINTF32 `%d    \x0`, eax
+;     PRINTF32 `%d\n\x0`, ebx
 ;     pop ecx
 ;     loop loop_start
+
+loop_start:
+    xor eax, eax
+    xor ebx, ebx
+
+    push ecx
+    dec ecx
+    imul ecx, ecx, 4
+    mov eax, [time_result + ecx]
+    mov ebx, [prio_result + ecx]
+    ; PRINTF32 `eax = %d  \x0`, eax
+    ; PRINTF32 `ebx = %d\n\x0`, ebx
+    cmp ebx, 0
+    je no_elem
+    xor edx, edx
+    div ebx
+no_elem:
+    ; PRINTF32 `rez = %d\n\x0`, eax
+    mov [esi + ecx + avg.quo], ax
+    mov [esi + ecx + avg.remain], dx
+    pop ecx
+    loop loop_start
 
 
     ;; Your code ends here
