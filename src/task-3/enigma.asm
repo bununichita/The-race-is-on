@@ -5,6 +5,8 @@ LETTERS_COUNT EQU 26
 
 section .data
     extern len_plain
+    extern printf
+
 
 section .text
     global rotate_x_positions
@@ -25,6 +27,27 @@ rotate_x_positions:
     ;; DO NOT MODIFY
     ;; TODO: Implement rotate_x_positions
     ;; FREESTYLE STARTS HERE
+
+    imul ebx, ebx, 2
+    imul ebx, ebx, 26
+    mov edi, [ecx + ebx]
+    add ebx, 26
+    mov esi, [ecx + ebx]
+    xor ebx, ebx
+
+    mov esi, ecx
+    cmp edx, 0
+    je shift
+    sub eax, 26
+shift:
+    mov ecx, eax
+loop_start:
+    
+
+
+    loop loop_start
+
+
 
 
     ;; FREESTYLE ENDS HERE
