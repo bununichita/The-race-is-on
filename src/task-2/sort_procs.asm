@@ -8,7 +8,6 @@ endstruc
 
 section .text
     global sort_procs
-    extern printf
 
 sort_procs:
     ;; DO NOT MODIFY
@@ -21,34 +20,71 @@ sort_procs:
 
     ; Your code starts here
 
-    ; movzx ax, [edx + proc.pid]
-    ; PRINTF32 `%d\n\x0`, eax
-    ; movzx eax, byte [edx + proc.prio]
-    ; PRINTF32 `%d\n\x0`, eax
-    ; movzx ax, [edx + proc.time]
-    ; PRINTF32 `%d\n\x0`, eax
-
-
     mov ecx, eax
-    mov ebx, 0
+    ; di este o variabila care retine daca s-a facut
+    ; vreo schimbare in timpul ultimei parcurgeri
 for_i:
-    PRINTF32 `%d \x0`, ebx
-    push ebx
-    imul ebx, ebx, 5
-    movzx ax, [edx + ebx + proc.pid]
-    PRINTF32 `%d    \x0`, eax
-    movzx eax, byte [edx + ebx + proc.prio]
-    PRINTF32 `%d    \x0`, eax
-    movzx ax, [edx + ebx + proc.time]
-    PRINTF32 `%d\n\x0`, eax
-    pop ebx
+    mov esi, 1
+    mov edi, 0
+for_j:
+    push esi
+    imul esi, esi, 5
+    jmp compare_start
+compare_stop:
+    pop esi
+    inc esi
+    jmp label
+swap_stop:
+    pop esi
 
-    inc ebx
-    cmp ebx, ecx
-    jl for_i
+label:
+    cmp esi, ecx
+    jl for_j
+    ; end for_j
+    cmp edi, 0
+    je prog_end
+    jmp for_i
+    ; end for_i
+
+compare_start:
+    movzx eax, byte [edx + esi + proc.prio]
+    movzx ebx, byte [edx + esi - 5 + proc.prio]
+    cmp eax, ebx
+    jg compare_stop
+    jl swap_proc
+
+    mov ax, [edx + esi + proc.time]
+    mov bx, [edx + esi - 5 + proc.time]
+    cmp eax, ebx
+    jg compare_stop
+    jl swap_proc
+
+    mov ax, [edx + esi + proc.pid]
+    mov bx, [edx + esi - 5 + proc.pid]
+    cmp eax, ebx
+    jl swap_proc
+    jmp compare_stop
+swap_proc:
+    inc edi
+    mov eax, 0
+    mov ebx, 0
+    mov al, byte [edx + esi + proc.prio]
+    mov bl, byte [edx + esi - 5 + proc.prio]
+    mov byte [edx + esi + proc.prio], bl
+    mov byte [edx + esi - 5 + proc.prio], al
+    push word [edx + esi + proc.time]
+    push word [edx + esi - 5 + proc.time]
+    pop word [edx + esi + proc.time]
+    pop word [edx + esi - 5 + proc.time]
+    push word [edx + esi + proc.pid]
+    push word [edx + esi - 5 + proc.pid]
+    pop word [edx + esi + proc.pid]
+    pop word [edx + esi - 5 + proc.pid]
+    jmp swap_stop
+prog_end:
 
     ;; Your code ends here
-    
+
     ;; DO NOT MODIFY
     popa
     leave
