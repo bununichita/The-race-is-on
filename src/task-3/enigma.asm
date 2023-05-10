@@ -28,26 +28,82 @@ rotate_x_positions:
     ;; TODO: Implement rotate_x_positions
     ;; FREESTYLE STARTS HERE
 
+    ; PRINTF32 `eax = %d  edx = %d` eax, 
+
     imul ebx, ebx, 2
     imul ebx, ebx, 26
-    mov edi, [ecx + ebx]
-    add ebx, 26
-    mov esi, [ecx + ebx]
-    xor ebx, ebx
-
+    ; PRINTF32 `ebx = %d\n\x0`, ebx
+    ; mov edi, [ecx + ebx]
+    ; add ebx, 26
+    ; mov esi, [ecx + ebx]
+    ; xor ebx, ebx
+    mov edi, ebx
+    ; PRINTF32 `edi = %d\n\x0`, edi
     mov esi, ecx
+    ; PRINTF32 `%c\n\x0`, byte [esi + 26]
+    ; PRINTF32 `////////////////\n\x0`
     cmp edx, 0
     je shift
-    sub eax, 26
+    mov edx, 26
+    sub edx, eax
+    mov eax, edx
+    ; PRINTF32 `%d\n\x0`, eax
 shift:
     mov ecx, eax
-loop_start:
+    ; PRINTF32 `%d\n\x0`, eax
     
+for_i:
+    push ecx
+    push edi
+    xor eax, eax
+    xor ebx, ebx
+    mov al, byte [esi + edi]
+    mov bl, byte [esi + edi + 26]
+    ; PRINTF32 `ecx = %d\n\x0`, ecx
+    ; PRINTF32 `al = %c     bl = %c\n\x0`, eax, ebx
+    xor edx, edx
+for_j:
+    xor ecx, ecx
+    ; push ebx
+    ; add ebx, edx
+    inc edi
+    ; inc edi
+    ; inc ebx
+    mov cl, byte [esi + edi]
+    dec edi
+    mov [esi + edi], byte cl
+    xor ecx, ecx
+    inc edi
+    ; add ebx, 27
+    mov cl, byte [esi + edi + 26]
+    ; dec ebx
+    dec edi
+    mov [esi + edi + 26], byte cl
+    ; pop ebx    
+    inc edx
+    cmp edx, 26
+    jl for_j
+; endfor_j
 
 
-    loop loop_start
+    ; push ebx
+    pop edi
+    push edi
+    ; add ebx, edx
 
+    mov [esi + edi + 25], byte al
+    add edi, 26
+    mov [esi + edi + 25], byte bl
+    ; pop ebx
+    pop edi
+    pop ecx
+    dec ecx
+    PRINTF32 `ecx2 = %d\n\x0`, ecx
+    cmp ecx, 0
+    jg for_i
+; endfor_i
 
+    ; mov esi, ecx
 
 
     ;; FREESTYLE ENDS HERE
