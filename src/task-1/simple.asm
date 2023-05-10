@@ -18,7 +18,25 @@ simple:
     ;; DO NOT MODIFY
    
     ;; Your code starts here
+    movzx ebx, byte [esi]
+    ; PRINTF32 `%d\n\x0`, ebx
+    ; PRINTF32 `%c\n\x0`, byte [esi + 0]
+    ; PRINTF32 `%c\n\x0`, byte [esi + 1]
+    mov eax, 0
+label:
+    movzx ebx, byte [esi + eax]
+    ; PRINTF32 `%d\n\x0`, ebx
+    add ebx, edx
+    cmp ebx, 91
+    jl lower
+    sub ebx, 26
+lower:
+    mov [edi + eax], bl
+    inc eax
+    cmp eax, ecx
+    jl label
 
+    ;; Your code ends here
 
 
 
