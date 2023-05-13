@@ -1,15 +1,16 @@
 %include "../include/io.mac"
 
 section .data
-matrix db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
+matrix db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
 section .text
 	global checkers
@@ -31,16 +32,16 @@ checkers:
     xor edx, edx
     inc eax
     inc ebx
-    imul edx, eax, 9
+    imul edx, eax, 10
     add edx, ebx
     ; in momentul acesta edx stocheaza pozitia curenta a damei
     ; push edx
-    sub edx, 9
+    sub edx, 10
     dec edx
     mov byte [matrix + edx], 1
     add edx, 2
     mov byte [matrix + edx], 1
-    add edx, 18
+    add edx, 20
     mov byte [matrix + edx], 1
     sub edx, 2
     mov byte [matrix + edx], 1
@@ -57,37 +58,64 @@ for_j:
     push eax
     imul eax, eax, 8
     add eax, ebx
-    imul esi, esi, 9
+    imul esi, esi, 10
     add esi, edi
     movzx edx, byte [matrix + esi]
     mov [ecx + eax], dx
     pop eax
     ; PRINTF32 `%d \x0`, edx
     inc ebx
-    cmp ebx, 9
-    jle for_j
+    cmp ebx, 10
+    jl for_j
 ; endfor_j
 
     inc eax
-    cmp eax, 9
-    jle for_i
+    cmp eax, 10
+    jl for_i
+
+
 ; endfor_i
+
+    ; ptintre matrix2
+
+;     pusha
+;     xor eax, eax
+; for_a:
+;     xor ebx, ebx
+; for_b:
+;     mov edx, eax
+;     imul edx, edx, 10
+;     add edx, ebx
+;     movzx esi, byte [matrix + edx]
+;     PRINTF32 `%d \x0`, esi
+;     inc ebx
+;     cmp ebx, 10
+;     jl for_b
+;     PRINTF32 `\n\x0`
+;     inc eax
+;     cmp eax, 10
+;     jl for_a
+
+;     popa
+
+    ; mov ecx, matrix2
 
     xor eax, eax
 for_1:
     xor ebx, ebx
 for_2:
     mov edx, eax
-    imul edx, edx, 9
+    imul edx, edx, 10
     add edx, ebx
     mov [matrix + edx], byte 0
     inc ebx
-    cmp ebx, 9
-    jle for_2
+    cmp ebx, 10
+    jl for_2
 
     inc eax
-    cmp eax, 9   
-    jle for_1
+    cmp eax, 10
+    jl for_1
+
 
     ;; FREESTYLE ENDS HERE
     ;; DO NOT MODIFY

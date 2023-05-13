@@ -1,15 +1,7 @@
 %include "../include/io.mac"
 
 section .data
-matrix db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
-        db 0, 0, 0, 0, 0, 0, 0, 0, 0
+
 
 section .text
     global bonus
@@ -27,171 +19,242 @@ bonus:
 
     ;; DO NOT MODIFY
     ;; FREESTYLE STARTS HERE
-    push ecx
-
-    xor edx, edx
-    inc eax
-    inc ebx
-    imul edx, eax, 9
-    add edx, ebx
-    ; in momentul acesta edx stocheaza pozitia curenta a damei
-    ; push edx
-    sub edx, 9
-    dec edx
-    mov byte [matrix + edx], 1
-    add edx, 2
-    mov byte [matrix + edx], 1
-    add edx, 18
-    mov byte [matrix + edx], 1
-    sub edx, 2
-    mov byte [matrix + edx], 1
-    xor eax, eax
-for_i:
-    ; PRINTF32 `test1\n\x0`
-    xor ebx, ebx
-for_j:
-    ; PRINTF32 `test2\n\x0`
-    mov esi, eax
-    inc esi
-    mov edi, ebx
-    inc edi
-    push eax
-    imul eax, eax, 8
-    add eax, ebx
-    imul esi, esi, 9
-    add esi, edi
-    movzx edx, byte [matrix + esi]
-    mov [ecx + eax],  dx
-    pop eax
-    ; PRINTF32 `%d \x0`, edx
-    inc ebx
-    cmp ebx, 9
-    jle for_j
-; endfor_j
-
-    inc eax
-    cmp eax, 9
-    jle for_i
-; endfor_i
-
-    xor eax, eax
-for_1:
-    xor ebx, ebx
-for_2:
-    mov edx, eax
-    imul edx, edx, 9
-    add edx, ebx
-    mov [matrix + edx], byte 0
-    inc ebx
-    cmp ebx, 9
-    jle for_2
-
-    inc eax
-    cmp eax, 9   
-    jle for_1
-
-
-
-    ; ecx stocheaza matricea aferenta
-
-
-    xor esi, esi
-    xor edi, edi
-    xor eax, eax
-first_loop:
-    xor ebx, ebx
-second_loop:
-    imul edx, eax, 8
-    add edx, ebx
-    ; PRINTF32 `%d\n\x0`, edx
-    push eax
-    movzx eax, byte [ecx + edx]
-    cmp al, 0
-    je zero
-    jmp one
-zero:
-    shl esi, 1
-    ; imul esi, esi, 2
-    ; PRINTF32 `esi = %d\n\x0`, esi
-    jmp next
-one:
-    PRINTF32 `esi   %d\n\x0`, edx
-    ; PRINTF32 `%d\n\x0`, eax
-    shl esi, 1
-    ; imul esi, esi, 2
-    inc esi
-    ; PRINTF32 `esi = %d\n\x0`, esi
-next:
-    pop eax
-    inc ebx
-    cmp ebx, 8
-    jl second_loop
-
-    inc eax
-    cmp eax, 4
-    jl first_loop
     
+    xor esi, esi ; esi si edi sunt registrii care trebuiesc returnati
+    xor edi, edi
 
+    push eax
+    push ebx
+    inc eax
+    dec ebx
+    cmp eax, 7
+    jg dreapta_sus
+    cmp ebx, 0
+    jl dreapta_sus
+    imul edx, eax, 8
+    add edx, ebx    
+    pop ebx
+    pop eax
 
+    cmp edx, 31
+    jg add_esi1
+    jmp add_edi1
 
+add_esi1:
+    sub edx, 32
+    push eax
+    mov eax, 1
+    cmp edx, 0
+    je power_zero_esi1
 
-    xor eax, eax
-    add eax, 4
-first_loop2:
-    xor ebx, ebx
-second_loop2:
+pow_esi1:
+    shl eax, 1
+    dec edx
+    cmp edx, 0
+    jg pow_esi1
+
+power_zero_esi1:
+    add esi, eax
+    pop eax
+    jmp ommit_pop1
+add_edi1:
+    push eax
+    mov eax, 1
+    cmp edx, 0
+    je power_zero_edi1
+
+pow_edi1:
+    shl eax, 1
+    dec edx
+    cmp edx, 0
+    jg pow_edi1
+
+power_zero_edi1:
+    add edi, eax
+    pop eax
+    jmp ommit_pop1
+
+dreapta_sus:
+    pop ebx
+    pop eax
+ommit_pop1:
+    push eax
+    push ebx
+    inc eax
+    inc ebx
+    cmp eax, 7
+    jg stanga_jos
+    cmp ebx, 7
+    jg stanga_jos
     imul edx, eax, 8
     add edx, ebx
-    ; PRINTF32 `%d\n\x0`, edx
-    push eax
-    movzx eax, byte [ecx + edx]
-    cmp al, 0
-    je zero2
-    jmp one2
-zero2:
-    shl edi, 1
-    ; imul edi, edi, 2
-    ; PRINTF32 `edi = %d\n\x0`, edi
-    jmp next2
-one2:
-    PRINTF32 `edi   %d\n\x0`, edx
-    ; PRINTF32 `%d\n\x0`, eax
-    shl edi, 1
-    ; imul edi, edi, 2
-    inc edi
-    ; PRINTF32 `edi = %d\n\x0`, edi
-next2:
+    
+    
+    pop ebx
     pop eax
+
+    cmp edx, 31
+    jg add_esi2
+    jmp add_edi2
+
+add_esi2:
+    sub edx, 32
+    push eax
+    mov eax, 1
+    cmp edx, 0
+    je power_zero_esi2
+
+pow_esi2:
+    shl eax, 1
+    dec edx
+    cmp edx, 0
+    jg pow_esi2
+
+power_zero_esi2:
+    add esi, eax
+    pop eax
+    jmp ommit_pop2
+add_edi2:
+    push eax
+    mov eax, 1
+    cmp edx, 0
+    je power_zero_edi2
+
+pow_edi2:
+    shl eax, 1
+    dec edx
+    cmp edx, 0
+    jg pow_edi2
+
+power_zero_edi2:
+    add edi, eax
+    pop eax
+    jmp ommit_pop2
+
+stanga_jos:
+    pop ebx
+    pop eax
+ommit_pop2:
+    push eax
+    push ebx
+    dec eax
+    dec ebx
+    cmp eax, 0
+    jl dreapta_jos
+    cmp ebx, 0
+    jl dreapta_jos
+    imul edx, eax, 8
+    add edx, ebx
+    
+    
+    pop ebx
+    pop eax
+
+    cmp edx, 31
+    jg add_esi3
+    jmp add_edi3
+
+add_esi3:
+    sub edx, 32
+    push eax
+    mov eax, 1
+    cmp edx, 0
+    je power_zero_esi3
+
+pow_esi3:
+    shl eax, 1
+    dec edx
+    cmp edx, 0
+    jg pow_esi3
+
+power_zero_esi3:
+    add esi, eax
+    pop eax
+    jmp ommit_pop3
+
+add_edi3:
+    push eax
+    mov eax, 1
+    cmp edx, 0
+    je power_zero_edi3
+
+pow_edi3:
+    shl eax, 1
+    dec edx
+    cmp edx, 0
+    jg pow_edi3
+
+power_zero_edi3:
+    add edi, eax
+    pop eax
+    jmp ommit_pop3
+
+dreapta_jos:
+    pop ebx
+    pop eax
+ommit_pop3:
+    push eax
+    push ebx
+    dec eax
     inc ebx
-    cmp ebx, 8
-    jl second_loop2
+    cmp eax, 0
+    jl fin
+    cmp ebx, 7
+    jg fin
+    imul edx, eax, 8
+    add edx, ebx
+    
+    
+    pop ebx
+    pop eax
 
-    inc eax
-    cmp eax, 8
-    jl first_loop2
+    cmp edx, 31
+    jg add_esi4
+    jmp add_edi4
 
-    ; PRINTF32 `%d    %d\n\x0`, esi, edi
+add_esi4:
+    sub edx, 32
+    push eax
+    mov eax, 1
+    cmp edx, 0
+    je power_zero_esi4
 
-    xor eax, eax
-last_for:
+pow_esi4:
+    shl eax, 1
+    dec edx
+    cmp edx, 0
+    jg pow_esi4
 
-    shl esi, 1
-    shl edi, 1
+power_zero_esi4:
+    add esi, eax
+    pop eax
+    jmp ommit_pop4
 
-    inc eax
-    cmp eax, 9
-    jl last_for
+add_edi4:
+    push eax
+    mov eax, 1
+    cmp edx, 0
+    je power_zero_edi4
 
+pow_edi4:
+    shl eax, 1
+    dec edx
+    cmp edx, 0
+    jg pow_edi4
 
-    PRINTF32 `esi = %d\n\x0`, esi
-    PRINTF32 `edi = %d\n\x0`, edi
+power_zero_edi4:
+    add edi, eax
+    pop eax
+    jmp ommit_pop4
 
-    ; mov [ebp + 16], esi
-    ; mov [ebp + 20], edi
-    mov ecx, esi
+fin:
+    pop ebx
+    pop eax
+ommit_pop4:
+    
+    mov [ecx], esi
     mov [ecx + 4], edi
-
-
+    
     ;; FREESTYLE ENDS HERE
     ;; DO NOT MODIFY
     popa
