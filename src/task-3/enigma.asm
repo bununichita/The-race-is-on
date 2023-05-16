@@ -39,13 +39,8 @@ rotate_x_positions:
     mov eax, edx
 shift:
     mov ecx, eax
-    ; inc ecx
-    ; PRINTF32 `ecx = %d\n\x0`, ecx
-    ; mov eax, 0 ; //////////////////////////
 for_1:
-    ; PRINTF32 `ecx2 = %d\n\x0`, ecx
     push ecx
-    ; inc eax ;//////////////////////////////////////
     push edi
     xor eax, eax
     xor ebx, ebx
@@ -53,12 +48,10 @@ for_1:
     mov bl, byte [esi + edi + 26]
     xor edx, edx
 for_j:
-    ; xor ecx, ecx
     inc edi
     mov cl, byte [esi + edi]
     dec edi
     mov [esi + edi], byte cl
-    ; xor ecx, ecx
     inc edi
     mov cl, byte [esi + edi + 26]
     dec edi
@@ -77,13 +70,9 @@ for_j:
     pop edi
     pop ecx
     dec ecx
-    ; PRINTF32 `ecx3 = %d\n\x0`, ecx
     cmp ecx, 0
-    ; PRINTF32 `ecx4 = %d\n\x0`, ecx
     jg for_1
 ; endfor_i
-    ; PRINTF32 `eax = %d\n\x0`, eax
-    ; mov ecx, esi
 
 
     ;; FREESTYLE ENDS HERE
@@ -108,9 +97,6 @@ enigma:
     ;; DO NOT MODIFY
     ;; TODO: Implement enigma
     ;; FREESTYLE STARTS HERE
-
-    
-
 
     ;; FREESTYLE ENDS HERE
     ;; DO NOT MODIFY

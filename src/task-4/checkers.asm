@@ -47,10 +47,8 @@ checkers:
     mov byte [matrix + edx], 1
     xor eax, eax
 for_i:
-    ; PRINTF32 `test1\n\x0`
     xor ebx, ebx
 for_j:
-    ; PRINTF32 `test2\n\x0`
     mov esi, eax
     inc esi
     mov edi, ebx
@@ -63,7 +61,7 @@ for_j:
     movzx edx, byte [matrix + esi]
     mov [ecx + eax], dx
     pop eax
-    ; PRINTF32 `%d \x0`, edx
+
     inc ebx
     cmp ebx, 10
     jl for_j
@@ -73,32 +71,7 @@ for_j:
     cmp eax, 10
     jl for_i
 
-
 ; endfor_i
-
-    ; ptintre matrix2
-
-;     pusha
-;     xor eax, eax
-; for_a:
-;     xor ebx, ebx
-; for_b:
-;     mov edx, eax
-;     imul edx, edx, 10
-;     add edx, ebx
-;     movzx esi, byte [matrix + edx]
-;     PRINTF32 `%d \x0`, esi
-;     inc ebx
-;     cmp ebx, 10
-;     jl for_b
-;     PRINTF32 `\n\x0`
-;     inc eax
-;     cmp eax, 10
-;     jl for_a
-
-;     popa
-
-    ; mov ecx, matrix2
 
     xor eax, eax
 for_1:

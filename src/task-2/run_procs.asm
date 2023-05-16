@@ -46,9 +46,6 @@ clean_results:
     ;; DO NOT MODIFY
    
     ;; Your code starts here
-    ; mov edx, 0
-    ; mov , [ecx + proc.time]
-    ; PRINTF32 `%d\n\x0`, edx
     ; esi este adresa proc_avg
     mov esi, eax
     ; edi este adresa proceselor sortate
@@ -66,34 +63,25 @@ for_j:
     push eax ; eliberez memoria pentru a putea muta timpul in eax
     mov eax, 0
     mov al, byte [edi + ebx + proc.prio]
-    ; PRINTF32 `edx = %d  \x0`, edx
-    ; PRINTF32 `eax = %d\n\x0`, eax
     cmp edx, eax
     pop eax
     je equal
     jmp not_equal
 equal:
     add ax, [edi + ebx + proc.time]
-    ; PRINTF32 `%d\n\x0`, eax
 not_equal:
     pop ebx
-    inc ebx
-    
+    inc ebx    
     cmp ebx, ecx
     jl for_j
+
     push edx
     dec edx
     imul edx, edx, 4
-    ; PRINTF32 `eax = %d\n\x0`, eax
     mov [time_result + edx], eax
-    ; PRINTF32 `prio_result = %d\n\x0`, [prio_result + edx]
     pop edx
-
-
     cmp edx, 5
     jne for_i
-
-
 
     mov edx, 0
 for_i2:
@@ -106,8 +94,6 @@ for_j2:
     push eax ; eliberez memoria pentru a putea muta timpul in eax
     mov eax, 0
     mov al, byte [edi + ebx + proc.prio]
-    ; PRINTF32 `edx = %d  \x0`, edx
-    ; PRINTF32 `eax = %d\n\x0`, eax
     cmp edx, eax
     pop eax
     je equal2
@@ -130,23 +116,7 @@ not_equal2:
     cmp edx, 5
     jne for_i2
 
-    PRINTF32 `///////////////////////////////\n\x0`
-
     mov ecx, 5
-
-
-; loop_start:
-;     push ecx
-;     dec ecx
-;     imul ecx, ecx, 4
-;     mov eax, [prio_result + ecx]
-;     mov ebx, [time_result + ecx]
-    
-;     PRINTF32 `%d    \x0`, eax
-;     PRINTF32 `%d\n\x0`, ebx
-;     pop ecx
-;     loop loop_start
-
 loop_start:
     xor eax, eax
     xor ebx, ebx
@@ -156,14 +126,11 @@ loop_start:
     imul ecx, ecx, 4
     mov eax, [time_result + ecx]
     mov ebx, [prio_result + ecx]
-    ; PRINTF32 `eax = %d  \x0`, eax
-    ; PRINTF32 `ebx = %d\n\x0`, ebx
     cmp ebx, 0
     je no_elem
     xor edx, edx
     div ebx
 no_elem:
-    ; PRINTF32 `rez = %d\n\x0`, eax
     mov [esi + ecx + avg.quo], ax
     mov [esi + ecx + avg.remain], dx
     pop ecx
