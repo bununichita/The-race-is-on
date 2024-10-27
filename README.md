@@ -1,9 +1,12 @@
-# Perfect assignment
+# Multiple tasks solved in ASM x86
 
-Write a program that given a number as input argument prints the corespondig number of 1s on standard output.
+### Author: Nichita-Adrian Bunu, 323CA Facultatea de Automatica si Calculatoare UNSTPB 
+**Contact:** [nichita_adrian.bunu@stud.acs.upb.ro](mailto:nichita_adrian.bunu@stud.acs.upb.ro)
 
-E.g:
-```bash
-$> ./binary 3
-1 1 1
-```
+---
+
+## Overview
+
+This project implements a variety of tasks that can be solved in C in ~10-30 lines of code, but are implemented in ASM X86, because why not? :)
+
+---
